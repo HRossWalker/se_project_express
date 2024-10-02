@@ -1,5 +1,5 @@
 const ClothingItem = require("../models/clothingItem");
-const { errorSelector } = require("../utils/errors");
+const { errorSelector, NO_SUCH_ID_ERROR } = require("../utils/errors");
 
 const createItem = (req, res) => {
   // console.log(req);
@@ -8,7 +8,7 @@ const createItem = (req, res) => {
 
   const { name, weather, imageUrl } = req.body;
 
-  ClothingItem.create({ name, weather, imageUrl })
+  ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((item) => {
       console.log(item);
       res.send({ data: item });
@@ -22,7 +22,7 @@ const createItem = (req, res) => {
 const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => {
-      res.status(200).send(items);
+      res.send(items);
     })
     .catch((err) => {
       // console.error(err);
@@ -35,32 +35,28 @@ const getItem = (req, res) => {
   ClothingItem.findById(itemId)
     .orFail()
     .then((items) => {
-      res.status(200).send(items);
+      res.send(items);
     })
     .catch((err) => {
-      console.error(err);
-      if (err.name === "ValidationError") {
-        return res.status(404).send({ message: err.message });
-      }
       // console.error(err);
       return errorSelector(res, err);
     });
 };
 
-const updateItem = (req, res) => {
-  // console.log(req.body);
-  const { itemId } = req.params;
-  const { imageUrl } = req.body;
-  ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
-    .orFail()
-    .then((items) => {
-      res.status(200).send(items);
-    })
-    .catch((err) => {
-      // console.error(err);
-      errorSelector(res, err);
-    });
-};
+// const updateItem = (req, res) => {
+//   // console.log(req.body);
+//   const { itemId } = req.params;
+//   const { imageUrl } = req.body;
+//   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
+//     .orFail()
+//     .then((items) => {
+//       res.send(items);
+//     })
+//     .catch((err) => {
+//       // console.error(err);
+//       errorSelector(res, err);
+//     });
+// };
 
 const deleteItem = (req, res) => {
   const itemId = req.params;
@@ -68,7 +64,7 @@ const deleteItem = (req, res) => {
   ClothingItem.findByIdAndDelete(itemId.itemId)
     .orFail()
     .then(() => {
-      res.status(200).send({});
+      res.send({ message: "Item successfully deleted." });
     })
     .catch((err) => {
       // console.error(err);
@@ -86,7 +82,7 @@ const likeItem = (req, res) => {
     )
       .orFail()
       .then((item) => {
-        res.status(200).send(item);
+        res.send(item);
       })
       .catch((err) => {
         // console.error(err);
@@ -103,13 +99,10 @@ const dislikeItem = (req, res) => {
   )
     .orFail()
     .then((item) => {
-      res.status(200).send(item);
+      res.send(item);
     })
     .catch((err) => {
       // console.error(err);
-      if (err.name === "ValidationError") {
-        return res.status(404).send({ message: err.message });
-      }
       return errorSelector(res, err);
     });
 };
@@ -118,7 +111,7 @@ module.exports = {
   createItem,
   getItems,
   getItem,
-  updateItem,
+  // updateItem,
   deleteItem,
   likeItem,
   dislikeItem,
