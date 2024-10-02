@@ -7,9 +7,8 @@ const errorSelector = (res, err) => {
     return res.status(INPUT_ERROR).send({ message: err.message });
   } else if (err.name === "DocumentNotFoundError") {
     return res.status(NO_SUCH_ID_ERROR).send({ message: err.message });
-  } else {
-    return res.status(SERVER_ERROR).send({ message: err.message });
   }
+  return res.status(SERVER_ERROR).send({ message: err.message });
 };
 
 module.exports = { errorSelector };
