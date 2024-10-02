@@ -42,7 +42,7 @@ const getUser = (req, res) => {
 
 const deleteUser = (req, res) => {
   const { userId } = req.params;
-  console.log(userId);
+  // console.log(userId);
   User.findByIdAndDelete(userId)
     .orFail()
     .then(() => {

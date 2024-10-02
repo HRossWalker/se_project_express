@@ -2,9 +2,9 @@ const ClothingItem = require("../models/clothingItem");
 const { errorSelector } = require("../utils/errors");
 
 const createItem = (req, res) => {
-  console.log(req);
-  console.log(req.body);
-  console.log(req.user._id);
+  // console.log(req);
+  // console.log(req.body);
+  // console.log(req.user._id);
 
   const { name, weather, imageUrl } = req.body;
 
@@ -48,7 +48,7 @@ const getItem = (req, res) => {
 };
 
 const updateItem = (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { itemId } = req.params;
   const { imageUrl } = req.body;
   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
@@ -64,7 +64,7 @@ const updateItem = (req, res) => {
 
 const deleteItem = (req, res) => {
   const itemId = req.params;
-  console.log(itemId.itemId);
+  // console.log(itemId.itemId);
   ClothingItem.findByIdAndDelete(itemId.itemId)
     .orFail()
     .then(() => {
