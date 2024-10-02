@@ -1,4 +1,5 @@
 const ClothingItem = require("../models/clothingItem");
+const { errorSelector } = require("../utils/errors");
 
 const createItem = (req, res) => {
   console.log(req);
@@ -13,12 +14,8 @@ const createItem = (req, res) => {
       res.send({ data: item });
     })
     .catch((err) => {
-      console.error(err);
-      if (err.name === "ValidationError") {
-        return res.status(400).send({ message: err.message });
-      } else {
-        return res.status(500).send({ message: "Error from createItem", err });
-      }
+      // console.error(err);
+      errorSelector(res, err);
     });
 };
 
@@ -28,8 +25,8 @@ const getItems = (req, res) => {
       res.status(200).send(items);
     })
     .catch((err) => {
-      console.error(err);
-      return res.status(500).send({ message: "Error from getItems", err });
+      // console.error(err);
+      errorSelector(res, err);
     });
 };
 
@@ -45,7 +42,8 @@ const getItem = (req, res) => {
       if (err.name === "ValidationError") {
         return res.status(404).send({ message: err.message });
       } else {
-        return res.status(500).send({ message: "Error from getItems", err });
+        // console.error(err);
+        errorSelector(res, err);
       }
     });
 };
@@ -60,12 +58,8 @@ const updateItem = (req, res) => {
       res.status(200).send(items);
     })
     .catch((err) => {
-      console.error(err);
-      if (err.name === "ValidationError") {
-        return res.status(404).send({ message: err.message });
-      } else {
-        return res.status(500).send({ message: "Error from updateItems", err });
-      }
+      // console.error(err);
+      errorSelector(res, err);
     });
 };
 
@@ -78,16 +72,8 @@ const deleteItem = (req, res) => {
       res.status(200).send({});
     })
     .catch((err) => {
-      console.error(err);
-      if (err.name === "ValidationError") {
-        return res.status(400).send({ message: err.message });
-      } else if (err.name === "CastError") {
-        return res.status(400).send({ message: err.message });
-      } else if (err.name === "DocumentNotFoundError") {
-        return res.status(404).send({ message: err.message });
-      } else {
-        return res.status(500).send({ message: "Error from deleteItems", err });
-      }
+      // console.error(err);
+      errorSelector(res, err);
     });
 };
 
@@ -104,18 +90,8 @@ const likeItem = (req, res) => {
         res.status(200).send(item);
       })
       .catch((err) => {
-        console.error(err);
-        if (err.name === "ValidationError") {
-          return res.status(404).send({ message: err.message });
-        } else if (err.name === "CastError") {
-          return res.status(400).send({ message: err.message });
-        } else if (err.name === "DocumentNotFoundError") {
-          return res.status(404).send({ message: err.message });
-        } else {
-          return res
-            .status(500)
-            .send({ message: "Error from updateItems", err });
-        }
+        // console.error(err);
+        errorSelector(res, err);
       });
 };
 //...
@@ -132,15 +108,11 @@ const dislikeItem = (req, res) => {
       res.status(200).send(item);
     })
     .catch((err) => {
-      console.error(err);
+      // console.error(err);
       if (err.name === "ValidationError") {
         return res.status(404).send({ message: err.message });
-      } else if (err.name === "CastError") {
-        return res.status(400).send({ message: err.message });
-      } else if (err.name === "DocumentNotFoundError") {
-        return res.status(404).send({ message: err.message });
       } else {
-        return res.status(500).send({ message: "Error from updateItems", err });
+        errorSelector(res, err);
       }
     });
 };
