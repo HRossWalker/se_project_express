@@ -1,5 +1,5 @@
 const ClothingItem = require("../models/clothingItem");
-const { errorSelector, NO_SUCH_ID_ERROR } = require("../utils/errors");
+const { errorSelector, CREATED } = require("../utils/errors");
 
 const createItem = (req, res) => {
   // console.log(req);
@@ -11,7 +11,7 @@ const createItem = (req, res) => {
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((item) => {
       console.log(item);
-      res.send({ data: item });
+      res.status(CREATED).send({ data: item });
     })
     .catch((err) => {
       // console.error(err);
@@ -39,7 +39,7 @@ const getItem = (req, res) => {
     })
     .catch((err) => {
       // console.error(err);
-      return errorSelector(res, err);
+      errorSelector(res, err);
     });
 };
 
@@ -103,7 +103,7 @@ const dislikeItem = (req, res) => {
     })
     .catch((err) => {
       // console.error(err);
-      return errorSelector(res, err);
+      errorSelector(res, err);
     });
 };
 
