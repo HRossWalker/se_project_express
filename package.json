@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "lint": "npx eslint .",
-    "dev": "nodemon app.js",
-    "start": "npm run dev"
+    "start": "nodemon app.js"
   },
   "author": "Ross Walker",
   "license": "ISC",

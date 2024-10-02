@@ -41,10 +41,9 @@ const getItem = (req, res) => {
       console.error(err);
       if (err.name === "ValidationError") {
         return res.status(404).send({ message: err.message });
-      } else {
-        // console.error(err);
-        errorSelector(res, err);
       }
+      // console.error(err);
+      errorSelector(res, err);
     });
 };
 
@@ -94,7 +93,6 @@ const likeItem = (req, res) => {
         errorSelector(res, err);
       });
 };
-//...
 
 const dislikeItem = (req, res) => {
   // console.log(req.params.itemId);
@@ -111,9 +109,8 @@ const dislikeItem = (req, res) => {
       // console.error(err);
       if (err.name === "ValidationError") {
         return res.status(404).send({ message: err.message });
-      } else {
-        errorSelector(res, err);
       }
+      errorSelector(res, err);
     });
 };
 
