@@ -43,7 +43,7 @@ const getItem = (req, res) => {
         return res.status(404).send({ message: err.message });
       }
       // console.error(err);
-      errorSelector(res, err);
+      return errorSelector(res, err);
     });
 };
 
@@ -110,7 +110,7 @@ const dislikeItem = (req, res) => {
       if (err.name === "ValidationError") {
         return res.status(404).send({ message: err.message });
       }
-      errorSelector(res, err);
+      return errorSelector(res, err);
     });
 };
 
