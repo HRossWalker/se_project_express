@@ -44,7 +44,6 @@ const createUser = (req, res) => {
         }
       );
     })
-
     .catch((err) => {
       // res.status(UNAUTHORIZED_ERROR).send({ message: err });
       console.log(`*****************${err}`);
