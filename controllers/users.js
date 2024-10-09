@@ -36,12 +36,14 @@ const createUser = (req, res) => {
       return bcrypt.hash(password, 10);
     })
     .then((hash) => {
-      return User.create({ email, name, avatar, password: hash });
-    })
-    .then((newUser) => {
-      const response = newUser.toObject();
-      delete response.password;
-      res.status(CREATED).send({ data: response });
+      console.log("stupid");
+      return User.create({ email, name, avatar, password: hash }).then(
+        (newUser) => {
+          const response = newUser.toObject();
+          delete response.password;
+          res.status(CREATED).send({ data: response });
+        }
+      );
     })
     .catch((err) => {
       // res.status(UNAUTHORIZED_ERROR).send({ message: err });
