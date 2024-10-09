@@ -1,25 +1,25 @@
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const {
   errorSelector,
   CREATED,
-  UNAUTHORIZED_ERROR,
-  AssertionError,
+  // UNAUTHORIZED_ERROR,
+  // AssertionError,
 } = require("../utils/errors");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/config");
 
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => {
-      // throw Error("!!!!!");
-      res.send(users);
-    })
-    .catch((err) => {
-      // console.error(err);
-      errorSelector(res, err);
-    });
-};
+// const getUsers = (req, res) => {
+//   User.find({})
+//     .then((users) => {
+//       // throw Error("!!!!!");
+//       res.send(users);
+//     })
+//     .catch((err) => {
+//       // console.error(err);
+//       errorSelector(res, err);
+//     });
+// };
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
@@ -32,7 +32,8 @@ const createUser = (req, res) => {
         error.name = "AssertionError";
         return Promise.reject(error);
       }
-      bcrypt.hash(password, 10);
+      console.log(password);
+      return bcrypt.hash(password, 10);
     })
     .then((hash) => {
       return User.create({ email, name, avatar, password: hash }).then(
@@ -86,18 +87,18 @@ const login = (req, res) => {
     });
 };
 
-const getUser = (req, res) => {
-  const { userId } = req.params;
-  User.findById(userId)
-    .orFail()
-    .then((user) => {
-      res.send(user);
-    })
-    .catch((err) => {
-      // console.error(err);
-      errorSelector(res, err);
-    });
-};
+// const getUser = (req, res) => {
+//   const { userId } = req.params;
+//   User.findById(userId)
+//     .orFail()
+//     .then((user) => {
+//       res.send(user);
+//     })
+//     .catch((err) => {
+//       // console.error(err);
+//       errorSelector(res, err);
+//     });
+// };
 
 // const deleteUser = (req, res) => {
 //   const { userId } = req.params;
@@ -115,9 +116,10 @@ const getUser = (req, res) => {
 // };
 
 module.exports = {
-  getUsers,
   createUser,
-  getUser,
   login,
+
+  // getUsers,
+  // getUser,
   // deleteUser
 };
