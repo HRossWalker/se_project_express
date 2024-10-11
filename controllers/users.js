@@ -50,6 +50,7 @@ const createUser = (req, res) => {
       return bcrypt.hash(password, 10);
     })
     .then((hash) => {
+      console.log("");
       return User.create({ email, name, avatar, password: hash }).then(
         (newUser) => {
           const response = newUser.toObject();
