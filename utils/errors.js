@@ -51,11 +51,6 @@ const errorSelector = (res, err) => {
   if (err.name === "AssertionError") {
     return res.status(ASSERTION_ERROR).send({ message: "User already exists" });
   }
-  // if (err.name === "Error") {
-  //   return res
-  //     .status(INPUT_ERROR)
-  //     .send({ message: "Ensure all fields are filled in to requirements" });
-  // }
   return res
     .status(SERVER_ERROR)
     .send({ message: "An error has occurred on the server." });
