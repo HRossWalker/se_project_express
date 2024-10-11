@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const mainRouter = require("./routes/index");
+const cors = require("cors");
 
 const app = express();
 const { PORT = 3001 } = process.env;
@@ -13,13 +14,14 @@ mongoose
   .catch(console.error);
 
 app.use(express.json());
-app.use((req, res, next) => {
-  req.user = {
-    _id: "66fc5edde13f500ae9e20f15",
-  };
-  next();
-});
+// app.use((req, res, next) => {
+//   req.user = {
+//     _id: "66fc5edde13f500ae9e20f15",
+//   };
+//   next();
+// });
 app.use("/", mainRouter);
+app.use(cors());
 
 app.listen(PORT, () => {
   console.log(`Listen up on port ${PORT}`);

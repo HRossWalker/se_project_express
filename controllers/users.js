@@ -4,8 +4,8 @@ const User = require("../models/user");
 const {
   errorSelector,
   CREATED,
-  // UNAUTHORIZED_ERROR,
-  // AssertionError,
+  AssertionError,
+  NoSuchUserError,
 } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 
@@ -21,22 +21,42 @@ const { JWT_SECRET } = require("../utils/config");
 //     });
 // };
 
+const getCurrentUser = (req, res) => {
+  User.findById(req.user._id)
+    .orFail()
+    .then((user) => {
+      res.send(user);
+    })
+
+    .catch((err) => errorSelector(res, err));
+};
+
+const updateCurrentUser = (req, res) => {
+  const { name, avatar } = req.body;
+
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, avatar },
+    { new: true, runValidators: true }
+  )
+    .then((updatedUser) => {
+      return res.send(updatedUser);
+    })
+    .catch((err) => errorSelector(res, err));
+};
+
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
-  // console.log(User.findOne({ email }));
+  // console.log(User.findOne({ email }));.
 
   User.findOne({ email })
     .then((existingUser) => {
       if (existingUser) {
-        const error = new Error();
-        error.name = "AssertionError";
-        return Promise.reject(error);
+        return Promise.reject(new AssertionError());
       }
-      console.log(password);
       return bcrypt.hash(password, 10);
     })
     .then((hash) => {
-      console.log("stupid");
       return User.create({ email, name, avatar, password: hash }).then(
         (newUser) => {
           const response = newUser.toObject();
@@ -47,7 +67,7 @@ const createUser = (req, res) => {
     })
     .catch((err) => {
       // res.status(UNAUTHORIZED_ERROR).send({ message: err });
-      console.log(`*****************${err}`);
+      // console.log(`*****************${err.name}`);
       errorSelector(res, err);
     });
 
@@ -118,8 +138,7 @@ const login = (req, res) => {
 module.exports = {
   createUser,
   login,
-
-  // getUsers,
-  // getUser,
+  updateCurrentUser,
+  getCurrentUser,
   // deleteUser
 };

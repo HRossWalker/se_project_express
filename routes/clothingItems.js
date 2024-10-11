@@ -6,7 +6,6 @@ const {
   createItem,
   getItems,
   getItem,
-  // updateItem,
   deleteItem,
   likeItem,
   dislikeItem,
@@ -18,11 +17,9 @@ router.post("/", auth, createItem);
 // Get
 router.get("/", getItems);
 router.get("/:itemId", getItem);
-// Update
-// router.put("/:itemId", updateItem);
 // Delete
 router.delete("/:itemId", auth, deleteItem);
-
+// Likes
 router.put("/:itemId/likes", auth, likeItem);
 router.delete("/:itemId/likes", auth, dislikeItem);
 

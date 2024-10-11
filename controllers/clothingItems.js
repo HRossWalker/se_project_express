@@ -1,5 +1,5 @@
 const ClothingItem = require("../models/clothingItem");
-const { errorSelector, CREATED } = require("../utils/errors");
+const { errorSelector, ForbiddenError, CREATED } = require("../utils/errors");
 
 const createItem = (req, res) => {
   // console.log(req);
@@ -59,21 +59,24 @@ const getItem = (req, res) => {
 // };
 
 const deleteItem = (req, res) => {
-  const itemId = req.params;
-  // console.log(itemId.itemId);
-  ClothingItem.findByIdAndDelete(itemId.itemId)
+  const { itemId } = req.params;
+  ClothingItem.findById(itemId)
     .orFail()
-    .then(() => {
-      res.send({ message: "Item successfully deleted." });
+    .then((item) => {
+      if (req.user._id === item.owner.toString()) {
+        return ClothingItem.findByIdAndDelete(item._id).then(() => {
+          res.send({ message: "Item successfully deleted." });
+        });
+      }
+      console.log("hi");
+      return Promise.reject(new ForbiddenError());
     })
     .catch((err) => {
-      // console.error(err);
       errorSelector(res, err);
     });
 };
 
 const likeItem = (req, res) => {
-  // console.log(req.params.itemId);
   if (req.user._id)
     ClothingItem.findByIdAndUpdate(
       req.params.itemId,
@@ -85,13 +88,11 @@ const likeItem = (req, res) => {
         res.send(item);
       })
       .catch((err) => {
-        // console.error(err);
         errorSelector(res, err);
       });
 };
 
 const dislikeItem = (req, res) => {
-  // console.log(req.params.itemId);
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $pull: { likes: req.user._id } },
@@ -102,7 +103,6 @@ const dislikeItem = (req, res) => {
       res.send(item);
     })
     .catch((err) => {
-      // console.error(err);
       errorSelector(res, err);
     });
 };
