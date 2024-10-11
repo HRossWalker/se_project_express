@@ -1,12 +1,11 @@
 const ClothingItem = require("../models/clothingItem");
-const { errorSelector, ForbiddenError, CREATED } = require("../utils/errors");
+const { errorSelector, CustomError, CREATED } = require("../utils/errors");
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
 
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((item) => {
-      console.log(item);
       res.status(CREATED).send({ data: item });
     })
     .catch((err) => {
@@ -64,8 +63,7 @@ const deleteItem = (req, res) => {
           res.send({ message: "Item successfully deleted." });
         });
       }
-      console.log("hi");
-      return Promise.reject(new ForbiddenError());
+      return Promise.reject(new CustomError("ForbiddenError"));
     })
     .catch((err) => {
       errorSelector(res, err);
@@ -107,7 +105,6 @@ module.exports = {
   createItem,
   getItems,
   getItem,
-  // updateItem,
   deleteItem,
   likeItem,
   dislikeItem,

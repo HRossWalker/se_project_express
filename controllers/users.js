@@ -1,12 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const {
-  errorSelector,
-  CREATED,
-  AssertionError,
-  NoSuchUserError,
-} = require("../utils/errors");
+const { errorSelector, CREATED, CustomError } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 
 // const getUsers = (req, res) => {
@@ -39,9 +34,7 @@ const updateCurrentUser = (req, res) => {
     { name, avatar },
     { new: true, runValidators: true }
   )
-    .then((updatedUser) => {
-      return res.send(updatedUser);
-    })
+    .then((updatedUser) => res.send(updatedUser))
     .catch((err) => errorSelector(res, err));
 };
 
@@ -52,7 +45,7 @@ const createUser = (req, res) => {
   User.findOne({ email })
     .then((existingUser) => {
       if (existingUser) {
-        return Promise.reject(new AssertionError());
+        return Promise.reject(new CustomError("AssertionError"));
       }
       return bcrypt.hash(password, 10);
     })
@@ -66,8 +59,6 @@ const createUser = (req, res) => {
       );
     })
     .catch((err) => {
-      // res.status(UNAUTHORIZED_ERROR).send({ message: err });
-      // console.log(`*****************${err.name}`);
       errorSelector(res, err);
     });
 
@@ -102,7 +93,6 @@ const login = (req, res) => {
       res.send({ token });
     })
     .catch((err) => {
-      console.error(err.name);
       errorSelector(res, err);
     });
 };

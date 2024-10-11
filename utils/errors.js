@@ -6,24 +6,10 @@ const NO_SUCH_ID_ERROR = 404;
 const ASSERTION_ERROR = 409;
 const SERVER_ERROR = 500;
 
-class AssertionError extends Error {
-  constructor(message) {
+class CustomError extends Error {
+  constructor(name, message) {
     super(message);
-    this.name = "AssertionError";
-  }
-}
-
-class NoSuchUserError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "NoSuchUserError";
-  }
-}
-
-class ForbiddenError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "ForbiddenError";
+    this.name = name;
   }
 }
 
@@ -61,7 +47,5 @@ module.exports = {
   CREATED,
   NO_SUCH_ID_ERROR,
   UNAUTHORIZED_ERROR,
-  AssertionError,
-  NoSuchUserError,
-  ForbiddenError,
+  CustomError,
 };
