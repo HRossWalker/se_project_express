@@ -1,7 +1,12 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const { errorSelector, CREATED, CustomError } = require("../utils/errors");
+const {
+  errorSelector,
+  CREATED,
+  CustomError,
+  INPUT_ERROR,
+} = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 
 const getCurrentUser = (req, res) => {
