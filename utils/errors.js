@@ -44,4 +44,5 @@ module.exports = {
   NO_SUCH_ID_ERROR,
   UNAUTHORIZED_ERROR,
   CustomError,
+  INPUT_ERROR,
 };
