@@ -9,7 +9,6 @@ const createItem = (req, res) => {
       res.status(CREATED).send({ data: item });
     })
     .catch((err) => {
-      // console.error(err);
       errorSelector(res, err);
     });
 };
@@ -20,7 +19,6 @@ const getItems = (req, res) => {
       res.send(items);
     })
     .catch((err) => {
-      // console.error(err);
       errorSelector(res, err);
     });
 };
@@ -33,25 +31,9 @@ const getItem = (req, res) => {
       res.send(items);
     })
     .catch((err) => {
-      // console.error(err);
       errorSelector(res, err);
     });
 };
-
-// const updateItem = (req, res) => {
-//   // console.log(req.body);
-//   const { itemId } = req.params;
-//   const { imageUrl } = req.body;
-//   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
-//     .orFail()
-//     .then((items) => {
-//       res.send(items);
-//     })
-//     .catch((err) => {
-//       // console.error(err);
-//       errorSelector(res, err);
-//     });
-// };
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;

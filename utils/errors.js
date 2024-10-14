@@ -14,17 +14,13 @@ class CustomError extends Error {
 }
 
 const errorSelector = (res, err) => {
-  if (
-    err.name === "ValidationError" ||
-    err.name === "CastError" ||
-    err.name === "Error"
-  ) {
+  if (err.name === "ValidationError" || err.name === "CastError") {
     return res.status(INPUT_ERROR).send({ message: "Invalid data" });
   }
   if (err.name === "DocumentNotFoundError" || err.name === "NoSuchUserError") {
     return res.status(NO_SUCH_ID_ERROR).send({ message: "No such ID or User" });
   }
-  if (err.name === "UnauthorizedError") {
+  if (err.message === "Incorrect email or password") {
     return res
       .status(UNAUTHORIZED_ERROR)
       .send({ message: "Email or Password incorrect" });
